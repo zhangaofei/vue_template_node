@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="jquery.js"></script>
+    <script src="jquery.cookie.min.js"></script>
+</head>
+<body>
+    <div>
+        <a href="b.html">bbb  <a>
+            <button  class='btn'>aaaaa</button>
+        
+    </div>
+   
+    
+</html>
+ 
+    <script>
+        // let ss;
+        // function set(key,val){
+        //    let  ss= 'key'+'='+escape (10)
+        //     document.cookie=ss
+        //      console.log('a:',ss)
+        // }
+        // set('hi','zs')
+        // console.log('a:',ss)
+        var btn=$('.btn')
+        var val='ali'
+        btn.click(function(){
+           $.cookie("key","10",{ expires: 7, path: '/' });
+            console.log($,'===',$.cookie("val"))  
+        })
+        function fun1(){
+            // alert("gg")
+            $.cookie('key','10',{ expires: 7, path: '/' });
+            console.log($.cookie('key'))
+            location.href='b.html'
+        }
+    </script>

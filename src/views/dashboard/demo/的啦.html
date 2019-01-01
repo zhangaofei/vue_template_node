@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <!-- 引入样式 -->
+  <!--<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">-->
+</head>
+<body>
+<div id="app">
+
+  <div  style="width: 50px;height: 30px;border: 1px solid;" @click="foo($event)" v-for="item in list">
+    <a :href="getUrl(item.url)"  :target="target" >{{item.tit}}</a>
+  </div>
+</div>
+</body>
+<!-- 先引入 Vue -->
+<script src="vue.min.js"></script>
+<!--<script src="https://unpkg.com/vue/dist/vue.js"></script>-->
+<!-- 引入组件库 -->
+<!--<script src="https://unpkg.com/element-ui/lib/index.js"></script>-->
+<script>
+  new Vue({
+    el: '#app',
+    data: function() {
+      return {
+        visible: false ,
+        pickerOptions2: {
+          shortcuts: [{
+            text: '最近一周',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: '最近一个月',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: '最近三个月',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              picker.$emit('pick', [start, end]);
+            }
+          }]
+        },
+        value6: '',
+        value7: '',
+        list:[
+          {
+            url:'http://www.baidu.com',
+            tit:'baidu'
+          },
+          {
+            url:'http://www.taobao.com',
+            tit:'taobao'
+          }
+        ],
+        url:'',
+        target:''
+      }
+    },
+    methods:{
+      change(val){
+        console.log(val,'val')
+      },
+      foo(ev){
+        window.open('https://www.baidu.com');
+        // if(1>10) {
+        //   this.url=url;
+        //   this.target='_blank'
+        //   // return 'javascript:void(0)'
+        // }else {
+        //   ev.cancelBubble=true;
+        //   this.target=''
+        //   // alert("err");
+        //   return 'javascript:void(0)'
+        // }
+      },
+      getUrl(url){
+
+        // if(1>10){
+        //   this.target='_blank'
+        //   return url
+        // }else{
+        //   alert("err");
+        //   this.target=''
+        //   return 'javascript:void(0)'
+        // }
+
+      }
+    }
+  })
+</script>
+</html>
