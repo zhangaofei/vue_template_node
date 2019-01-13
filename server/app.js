@@ -1,41 +1,26 @@
-var express = require('express');  // 加载express模块
-var app = express(); // 启动Web服务器
-var router = express.Router();
-
-var path = require('path');
+let express = require('express');  // 加载express模块
+let app = express(); // 启动Web服务器
+const router = express.Router();
+const upload =require('./router/upload')
+let path = require('path');
+let query = require('./db');
 // 引入path模块的作用：因为页面样式的路径放在了bower_components，告诉express，请求页面里所过来的请求中，如果有请求样式或脚本，都让他们去bower_components中去查找
 // ****************************=================================
-var mysql = require('mysql'); // 加载mysql模块
-let common= require('./public')
-var pool = mysql.createPool({
-  host: 'localhost',
-  user: 'root',
-  password: '123456',
-  database: 'dbtest'
-});
+let common= require('./public');
 
-function query(sql, callback) {
-  pool.getConnection(function (err, connection) {
-    // Use the connection
-    connection.query(sql, function (err, rows) {
-      callback(err, rows);
-      connection.release();//释放链接
-    });
-  });
-}
 // ****************************=================================
 // app.locals.moment = require('moment'); // 载入moment模块，格式化日期
-
-// var serveStatic = require('serve-static');  // 静态文件处理
+// let serveStatic = require('serve-static');  // 静态文件处理
 // app.use(serveStatic('public')); // 路径：public
-
-var bodyParser = require('body-parser');
+let joinPath = path.dirname('.' +
+  '' +
+  '/server/public');
+console.log('joinPath',joinPath)
+let bodyParser = require('body-parser');
 // 因为后台录入页有提交表单的步骤，故加载此模块方法（bodyParser模块来做文件解析），将表单里的数据进行格式化
 // app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
-var port = process.env.PORT || 3000; // 设置端口号：3000
-app.listen(port); // 监听 port[3000]端口
-console.log('start on port' + port);
+let port = process.env.PORT || 3000; // 设置端口号：3000
 
 //login
 app.post('/api/user/login', function (req, res) {console.log(req)
@@ -47,10 +32,8 @@ app.post('/api/user/login', function (req, res) {console.log(req)
   /*arrInfo*/
   let lgInfoArr;
   query(arrInfo, function (err, result) {
-    console.log('arrInfo',result[0].lgInfoArr);
-    // if(result[0].lgInfoArr!=null){
+    // console.log('arrInfo',result[0].lgInfoArr);
       lgInfoArr=result[0].lgInfoArr||'[]';
-      console.log('zzzzzzzzzzzzzzz',lgInfoArr);
       let arr=JSON.parse(lgInfoArr);
       arr.push({lgDevice:userAgent,lgTime:timestamp});
       console.log('req:',req.headers,'req2:',timestamp,arr,JSON.stringify(arr));
@@ -85,28 +68,8 @@ app.post('/api/user/login', function (req, res) {console.log(req)
           })
         }
       });
-    // }
   });
-
-
-
-
-
-  /**/
-
   // allmodle.usermes.findByNP(nickname, password, function (err, np) {
-  //   if (err) {
-  //     console.log(err);
-  //     var mes = "请求错误!";
-  //     res.json({mes: mes});
-  //   } else if (np.length > 0) {
-  //     res.json({nickname: np[0].nickname});
-  //   } else if (np.length === 0) {
-  //     var mes = "用户名或密码错误!";
-  //     res.json({mes: mes});
-  //   }
-  // });
-
 });
 //register
 app.post('/api/user/register', function (req, res) {
@@ -133,36 +96,16 @@ app.post('/api/user/register', function (req, res) {
 });
 //logout
 app.post('/api/user/logout', function (req, res) {
-  // console.log('sql:',sql)
-  // query(function (err, rows) {
-  //   if (err) {
-  //     console.log('err',err)
-  //   } else {
-  //     res.json({message:'scuuess'});
-  //   }
-  // })
   res.json({message:'scuuess'});
 });
 // user-agent'
 app.post('/api/user/updateLoginInfo', function (req, res) {
-  // query(function (err, rows) {
-  //   if (err) {
-  //     console.log('err',err)
-  //   } else {
-  //     res.json({message:'scuuess'});
-  //   }
-  // })
   res.json({message:'scuuess'});
 });
-//
-/*app.POST('/api/user/uploadImgs', function (req, res) {
-  // query(function (err, rows) {
-  //   if (err) {
-  //     console.log('err',err)
-  //   } else {
-  //     res.json({message:'scuuess'});
-  //   }
-  // })
-  res.json({message:'scuuess'});
-});*/
+app.use('/',upload);
+// app.listen(port); // 监听 port[3000]端口
+app.listen(port,()=>{
+  console.log('start on port' + port);
+  console.log('router:/n',router)
+})
 
